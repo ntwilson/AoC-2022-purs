@@ -1,0 +1,6 @@
+{
+  "purescript.importsPreferredModules": [
+    "AOC.Prelude"
+  ],
+  "purescript.preludeModule": "AOC.Prelude"
+}
