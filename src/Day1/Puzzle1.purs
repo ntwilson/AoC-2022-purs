@@ -11,7 +11,7 @@ import Node.FS.Aff as FS
 
 getInput :: ExceptT String Aff (Array String)
 getInput = do
-  allText <- withExceptT message $ ExceptT $ try $ FS.readTextFile Encoding.UTF8 "inputs/Day1Puzzle1.txt"
+  allText <- withExceptT message $ ExceptT $ try $ FS.readTextFile Encoding.UTF8 "inputs/Day1.txt"
   pure $ String.split (Pattern "\n") allText
 
 

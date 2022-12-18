@@ -61,7 +61,7 @@ decodeRound opponentCode selfCode =
 
 getInput :: ExceptT String Aff (Array String)
 getInput = do
-  allText <- withExceptT message $ ExceptT $ try $ FS.readTextFile Encoding.UTF8 "inputs/Day2Puzzle1.txt"
+  allText <- withExceptT message $ ExceptT $ try $ FS.readTextFile Encoding.UTF8 "inputs/Day2.txt"
   pure $ Array.filter (not String.null) $ String.split (Pattern "\n") allText
 
 parseInput :: ∀ m. Apply m => MonadThrow String m => Array String -> m (Array Round)

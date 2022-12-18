@@ -9,6 +9,7 @@ import Data.Foldable (maximum, sum) as Exports
 import Data.Function (on) as Exports
 import Data.Interpolate (i) as Exports
 import Data.Maybe (Maybe(..), fromMaybe) as Exports
+import Data.Set (Set) as Exports
 import Data.String (Pattern(..)) as Exports
 import Data.Traversable (traverse) as Exports
 import Data.Unfoldable (range) as Exports
