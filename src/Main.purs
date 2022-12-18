@@ -10,6 +10,10 @@ import Day3.Puzzle1 as Day3.Puzzle1
 import Day3.Puzzle2 as Day3.Puzzle2
 import Day4.Puzzle1 as Day4.Puzzle1
 import Day4.Puzzle2 as Day4.Puzzle2
+import Day5.Puzzle1 as Day5.Puzzle1
+import Day5.Puzzle2 as Day5.Puzzle2
+import Day6.Puzzle1 as Day6.Puzzle1
+import Day6.Puzzle2 as Day6.Puzzle2
 
 run :: ExceptT String Aff Unit
 run = do
@@ -29,6 +33,14 @@ run = do
   Day4.Puzzle1.run
   log "Day4.Puzzle2:"
   Day4.Puzzle2.run
+  log "Day5.Puzzle1:"
+  Day5.Puzzle1.run
+  log "Day5.Puzzle2:"
+  Day5.Puzzle2.run
+  log "Day6.Puzzle1:"
+  Day6.Puzzle1.run
+  log "Day6.Puzzle2:"
+  Day6.Puzzle2.run
 
 main :: Effect Unit
 main = launchAff_ do

@@ -1,10 +1,11 @@
 module AOC.Prelude (module Exports, (..)) where
 
-import Control.Monad.Error.Class (class MonadThrow, try, throwError) as Exports
+import Control.Alt ((<|>)) as Exports
+import Control.Monad.Error.Class (class MonadThrow, liftEither, try, throwError) as Exports
 import Control.Monad.Except (ExceptT(..), except, runExceptT, withExceptT) as Exports
 import Data.Array.NonEmpty (NonEmptyArray) as Exports
 import Data.Bifunctor (lmap) as Exports
-import Data.Either (Either(..)) as Exports
+import Data.Either (Either(..), note) as Exports
 import Data.Filterable (filterMap) as Exports
 import Data.Foldable (maximum, sum) as Exports
 import Data.Function (on) as Exports

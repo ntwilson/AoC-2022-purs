@@ -16,6 +16,7 @@ to generate this file without the comments in this block.
   , "arrays"
   , "bifunctors"
   , "console"
+  , "control"
   , "effect"
   , "either"
   , "exceptions"
@@ -23,16 +24,19 @@ to generate this file without the comments in this block.
   , "foldable-traversable"
   , "integers"
   , "interpolate"
+  , "lists"
   , "maybe"
   , "node-buffer"
   , "node-fs-aff"
   , "ordered-collections"
   , "parsing"
   , "prelude"
+  , "spec"
   , "strings"
   , "transformers"
   , "tuples"
   , "unfoldable"
+  , "unicode"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
