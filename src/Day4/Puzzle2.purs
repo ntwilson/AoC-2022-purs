@@ -1,4 +1,4 @@
-module Day4.Puzzle1 where
+module Day4.Puzzle2 where
 
 import AOC.Prelude
 
@@ -48,7 +48,7 @@ parseInput = traverse parsePair
 pairIsTarget :: Tuple (Array Int) (Array Int) -> Boolean
 pairIsTarget = uncurry fn
   where
-  fn range1 range2 = Array.length range1 == n || Array.length range2 == n
+  fn range1 range2 = Array.length range1 + Array.length range2 /= n
     where
     n = Array.length $ Array.union range1 range2
 
