@@ -1,8 +1,9 @@
-module Day7.Puzzle1 where
+module Day7.Puzzle2 where
 
 import AOC.Prelude
 
 import Data.Array as Array
+import Data.Foldable (minimumBy)
 import Data.Generic.Rep (class Generic)
 import Data.Identity (Identity)
 import Data.List (List(..), (:))
@@ -65,7 +66,7 @@ testInput =
 
 -- we only need to capture changes to the current directory, plus any files listed in the current directory.
 --`ls` commands are irrelevant, as are directories listed when doing `ls`.
-data Input = NavigateIn String | NavigateOut | FileSize Int
+data Input = NavigateIn String | NavigateOut | FileSize String Int
 derive instance Eq Input
 derive instance Generic Input _
 instance Show Input where show = genericShow
@@ -76,7 +77,10 @@ parseInput s = liftEither $ lmap parseErrorMessage $ runParser s $ do
   where
   parseNavigateOut = Parsing.try (Parsing.string "$ cd .." $> Just NavigateOut)
   parseNavigateIn = Parsing.try (Parsing.string "$ cd " *> restOfLine <#> NavigateIn <#> Just) 
-  parseFileSize = Parsing.try (Parsing.intDecimal <* Parsing.space <* restOfLine) <#> FileSize <#> Just
+  parseFileSize = Parsing.try do
+    size <- Parsing.intDecimal <* Parsing.space 
+    name <- restOfLine 
+    pure $ Just $ FileSize name size
 
   parseLSCommand = Parsing.try $ Parsing.string "$ ls" $> Nothing
   parseDir = Parsing.try $ (Parsing.string "dir " *> restOfLine) $> Nothing
@@ -90,16 +94,20 @@ parseAllInput lines = case Array.uncons lines of
   Just {head} -> throwError (i"Expecting input to start with 'cd /', but starts with'"head"'. Unable to parse input without starting in the home directory")
   Nothing -> throwError "Unable to parse empty input"
 
-data FSItem = Dir (List FSItem) | File Int
+data FSItem = Dir { name :: String, contents :: List FSItem } | File { name :: String, size :: Int }
 derive instance Generic FSItem _
 instance Show FSItem where show x = genericShow x
 
 sizeOf :: FSItem -> Int
-sizeOf (Dir xs) = sum $ (sizeOf <$> xs)
-sizeOf (File size) = size
+sizeOf (Dir {contents}) = sum $ (sizeOf <$> contents)
+sizeOf (File {size}) = size
+
+nameOf :: FSItem -> String
+nameOf (Dir {name}) = name
+nameOf (File {name}) = name
 
 buildFileSystem :: List Input -> FSItem
-buildFileSystem input = Dir $ consumeDir input 
+buildFileSystem input = Dir $ { name: "/", contents: consumeDir input }
   where
   -- consumes until you hit NavigateOut and then returns the consumed stuff plus the remainder
   consumeDir :: List Input -> List FSItem
@@ -107,23 +115,31 @@ buildFileSystem input = Dir $ consumeDir input
     where
     go :: (List FSItem) -> List Input -> { this :: List FSItem, next :: List Input }
     go this input = case input of
-      FileSize i : rest -> go (File i : this) rest
-      NavigateIn _ : rest -> 
-        let {this: dir, next} = go Nil rest
-        in go (Dir dir : this) next
+      FileSize name size : rest -> go (File { size, name } : this) rest
+      NavigateIn name : rest -> 
+        let {this: contents, next} = go Nil rest
+        in go (Dir {name, contents} : this) next
       NavigateOut : next -> { this, next }
       Nil -> { this, next: Nil }
 
-solution :: FSItem -> Int
-solution (File _) = 0
-solution (Dir xs) = sum $ filter (_ <= 100000) $ allDirectories xs
+solution :: ∀ m. MonadThrow String m => FSItem -> m FSItem
+solution (File _) = throwError "No directories found to delete"
+solution root@(Dir {contents}) = targetDir # noteM "Unable to locate a directory large enough to free up the needed space"
   where
-  allDirectories ((Dir xs) : rest) = sizeOf (Dir xs) : allDirectories xs <> allDirectories rest
+  targetDir = minimumBy (comparing sizeOf) $ filter (\d -> sizeOf d >= neededSpace) $ allDirectories contents
+
+  allDirectories (dir@(Dir {contents}) : rest) = dir : allDirectories contents <> allDirectories rest
   allDirectories (File _ : rest) = allDirectories rest
   allDirectories Nil = Nil
 
+  sizeOfUpdate = 30_000_000
+  sizeOfDisk = 70_000_000
+  neededSpace = sizeOfUpdate - availableSpace
+  availableSpace = sizeOfDisk - sizeOf root
+
+
 ans :: ∀ m. MonadThrow String m => Array String -> m Int
-ans xs = solution <<< buildFileSystem <<< List.fromFoldable <$> parseAllInput xs
+ans xs = sizeOf <$> (solution =<< buildFileSystem <<< List.fromFoldable <$> parseAllInput xs)
 
 run :: ExceptT String Aff Unit
 run = getInput >>= ans >>= logShow

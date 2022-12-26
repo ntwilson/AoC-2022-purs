@@ -91,9 +91,6 @@ evaluateInstruction stacks { nCrates, destStack, sourceStack } = do
 
     pure {newDest, newSource}
 
-  noteM :: ∀ a. String -> Maybe a -> m a
-  noteM e x = liftEither $ note e x 
-
 ans :: ∀ m. Bind m => Monad m => MonadThrow String m => Input -> m String
 ans { instructions, stacks } = do
   stacks <- Array.foldM evaluateInstruction stacks instructions
