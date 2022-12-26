@@ -4,8 +4,6 @@ import AOC.Prelude
 
 import Data.Array as Array
 import Data.Array.NonEmpty as NonEmptyArray
-import Data.Monoid.Additive (Additive(..))
-import Data.Newtype (un)
 import Data.NonEmpty (NonEmpty(..))
 import Data.NonEmpty as NonEmpty
 import Data.Set as Set
@@ -89,11 +87,18 @@ solution :: Array Movement -> Int
 solution input = Set.size allTailPositions
   where 
   allTailPositions = Set.fromFoldable (NonEmptyArray.last <$> allPositions)
-  initialState :: NonEmpty Array {x :: Int, y :: Int}
-  initialState = (1 .. 10) <#> const (un Additive $ mempty)
+
+  -- Each item in the outer array represents a move
+  -- Each item in the inner array represents the positions of the 10 knots
+  allPositions :: Array (NonEmptyArray Position)
+  allPositions = NonEmptyArray.fromNonEmpty <$> scanl fold initialState movements
+
+  initialState :: NonEmpty Array Position
+  initialState = (1 .. 10) <#> const {x: 0, y: 0}
+
   movements = input # Array.concatMap \{count, direction} -> (1 .. count) <#> const direction
-  allPositions = NonEmptyArray.fromNonEmpty <$> scanl fn initialState movements
-  fn knots direction = 
+
+  fold knots direction = 
     let 
       newHead = move direction (NonEmpty.head knots)
       newTail = Array.scanl chaseHead newHead $ NonEmpty.tail knots
