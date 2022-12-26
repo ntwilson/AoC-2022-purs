@@ -9,6 +9,8 @@ import Day7.Puzzle1 (Input(..))
 import Day7.Puzzle1 as Day7.Puzzle1
 import Day7.Puzzle2 as Day7.Puzzle2
 import Day8.Puzzle1 as Day8.Puzzle1
+import Day9.Puzzle1 as Day9.Puzzle1
+import Day9.Puzzle2 as Day9.Puzzle2
 import Effect (Effect)
 import Test.Spec (describe, it)
 import Test.Spec.Assertions (shouldEqual)
@@ -59,3 +61,11 @@ main = launchAff_ do
     describe "Day 8 Puzzle 1" do
       it "passes the provided test case" do
         Day8.Puzzle1.ans Day8.Puzzle1.testInput `shouldEqual` Right 21
+
+    describe "Day 9 Puzzle 1" do
+      it "passes the provided test case" do
+        Day9.Puzzle1.ans Day9.Puzzle1.testInput `shouldEqual` Right 13
+
+    describe "Day 9 Puzzle 2" do
+      it "passes the provided test case" do
+        Day9.Puzzle2.ans Day9.Puzzle2.testInput `shouldEqual` Right 36

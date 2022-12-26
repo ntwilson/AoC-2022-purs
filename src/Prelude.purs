@@ -7,10 +7,11 @@ import Data.Array.NonEmpty (NonEmptyArray) as Exports
 import Data.Bifunctor (lmap) as Exports
 import Data.Either (Either(..), note) as Exports
 import Data.Filterable (filter, filterMap) as Exports
-import Data.Foldable (maximum, sum) as Exports
+import Data.Foldable (foldl, maximum, sum) as Exports
 import Data.Function (on) as Exports
 import Data.Interpolate (i) as Exports
 import Data.Maybe (Maybe(..), fromMaybe, maybe) as Exports
+import Data.Newtype (un, unwrap) as Exports
 import Data.Set (Set) as Exports
 import Data.String (Pattern(..)) as Exports
 import Data.Traversable (sequence, traverse) as Exports
