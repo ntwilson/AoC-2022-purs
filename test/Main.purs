@@ -2,10 +2,14 @@ module Test.Main where
 
 import AOC.Prelude
 
+import Data.BigInt as BigInt
 import Data.Foldable (for_)
+import Data.Maybe (maybe')
 import Day10.Puzzle1 as Day10
 import Day10.Puzzle1 as Day10.Puzzle1
 import Day10.Puzzle2 as Day10.Puzzle2
+import Day11.Puzzle1 as Day11.Puzzle1
+import Day11.Puzzle2 as Day11.Puzzle2
 import Day6.Puzzle1 as Day6.Puzzle1
 import Day6.Puzzle2 as Day6.Puzzle2
 import Day7.Puzzle1 (Input(..))
@@ -17,6 +21,7 @@ import Day9.Puzzle2 as Day9.Puzzle2
 import Effect (Effect)
 import Test.Spec (describe, it)
 import Test.Spec.Assertions (shouldEqual)
+import Test.Spec.Assertions as Spec
 import Test.Spec.Reporter (consoleReporter)
 import Test.Spec.Runner (runSpec)
 
@@ -88,3 +93,12 @@ main = launchAff_ do
             , "######......######......######......####"
             , "#######.......#######.......#######....."
             ]
+
+    describe "Day 11 Puzzle 1" do
+      it "passes the provided test case" do
+        Day11.Puzzle1.ans Day11.Puzzle1.testInput `shouldEqual` 10605
+
+    describe "Day 11 Puzzle 2" do
+      it "passes the provided test case" do
+        expected <- BigInt.fromString "2713310158" # maybe (Spec.fail "bad test setup. Couldn't parse int" $> zero) pure
+        Day11.Puzzle2.ans Day11.Puzzle2.testInput `shouldEqual` expected

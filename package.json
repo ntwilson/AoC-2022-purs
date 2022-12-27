@@ -1,0 +1,25 @@
+{
+  "name": "aoc-2022-purs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntwilson/AoC-2022-purs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ntwilson/AoC-2022-purs/issues"
+  },
+  "homepage": "https://github.com/ntwilson/AoC-2022-purs#readme",
+  "dependencies": {
+    "big-integer": "^1.6.51"
+  }
+}
