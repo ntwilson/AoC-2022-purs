@@ -4,8 +4,6 @@ import AOC.Prelude
 
 import Data.BigInt as BigInt
 import Data.Foldable (for_)
-import Data.Maybe (maybe')
-import Day10.Puzzle1 as Day10
 import Day10.Puzzle1 as Day10.Puzzle1
 import Day10.Puzzle2 as Day10.Puzzle2
 import Day11.Puzzle1 as Day11.Puzzle1

@@ -31,7 +31,8 @@ type MonkeyState = { divisor :: WorryLevel, monkeys :: Array Monkey }
 
 testInput :: MonkeyState
 testInput = 
-  { divisor: BigInt.fromInt $ 13 * 17 * 19 * 23
+  -- divisor needs to be the least common multiple of all the behavior denominators
+  { divisor: BigInt.fromInt $ 13 `lcm` 17 `lcm` 19 `lcm` 23
   , monkeys:
     [ { items: BigInt.fromInt <$> 79:98:empty
       , operation: (_ * BigInt.fromInt 19)
@@ -58,7 +59,8 @@ testInput =
 
 realInput :: MonkeyState 
 realInput = 
-  { divisor: BigInt.fromInt $ 2 * 3 * 5 * 7 * 11 * 13 * 17 * 19
+  -- divisor needs to be the least common multiple of all the behavior denominators
+  { divisor: BigInt.fromInt $ 2 `lcm` 3 `lcm` 5 `lcm` 7 `lcm` 11 `lcm` 13 `lcm` 17 `lcm` 19
   , monkeys:
     [ { items: BigInt.fromInt <$> 64:empty
       , operation: (_ * BigInt.fromInt 7)
@@ -127,6 +129,12 @@ passItem id = do
   case result of 
     Just {item, monkey, state} -> do
       State.put {divisor, monkeys: state}
+      -- Worry will grow outside the bounds allowed by BigInt or Number.
+      -- But we don't need to know the total worry value, we only need to be able to 
+      -- know if it is divisible by each monkey's behavior.denominator.  We retain this
+      -- information while keeping the worry value representable by always taking the 
+      -- mod of the least common multiple (or in this case just the product) of all 
+      -- monkeys' behavior.denominator
       let worry = monkey.operation item `mod` divisor
       throwItem worry (monkeyToThrowTo monkey worry)
       pure $ Just worry 
