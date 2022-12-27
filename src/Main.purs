@@ -4,6 +4,8 @@ import AOC.Prelude
 
 import Day1.Puzzle1 as Day1.Puzzle1
 import Day1.Puzzle2 as Day1.Puzzle2
+import Day10.Puzzle1 as Day10.Puzzle1
+import Day10.Puzzle2 as Day10.Puzzle2
 import Day2.Puzzle1 as Day2.Puzzle1
 import Day2.Puzzle2 as Day2.Puzzle2
 import Day3.Puzzle1 as Day3.Puzzle1
@@ -59,6 +61,10 @@ run = do
   Day9.Puzzle1.run
   log "Day9.Puzzle2:"
   Day9.Puzzle2.run
+  log "Day10.Puzzle1:"
+  Day10.Puzzle1.run
+  log "Day10.Puzzle2:"
+  Day10.Puzzle2.run
 
 main :: Effect Unit
 main = launchAff_ do

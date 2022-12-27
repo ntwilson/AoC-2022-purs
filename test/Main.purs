@@ -3,6 +3,9 @@ module Test.Main where
 import AOC.Prelude
 
 import Data.Foldable (for_)
+import Day10.Puzzle1 as Day10
+import Day10.Puzzle1 as Day10.Puzzle1
+import Day10.Puzzle2 as Day10.Puzzle2
 import Day6.Puzzle1 as Day6.Puzzle1
 import Day6.Puzzle2 as Day6.Puzzle2
 import Day7.Puzzle1 (Input(..))
@@ -69,3 +72,19 @@ main = launchAff_ do
     describe "Day 9 Puzzle 2" do
       it "passes the provided test case" do
         Day9.Puzzle2.ans Day9.Puzzle2.testInput `shouldEqual` Right 36
+
+    describe "Day 10 Puzzle 1" do
+      it "passes the provided test case" do
+        Day10.Puzzle1.ans Day10.Puzzle1.testInput `shouldEqual` Right 13140
+      
+    describe "Day 10 Puzzle 2" do
+      it "passes the provided test case" do
+        Day10.Puzzle2.ans Day10.Puzzle2.testInput `shouldEqual` 
+          Right 
+            [ "##..##..##..##..##..##..##..##..##..##.."
+            , "###...###...###...###...###...###...###."
+            , "####....####....####....####....####...."
+            , "#####.....#####.....#####.....#####....."
+            , "######......######......######......####"
+            , "#######.......#######.......#######....."
+            ]

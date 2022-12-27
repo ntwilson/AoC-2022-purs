@@ -14,7 +14,7 @@ import Data.Maybe (Maybe(..), fromMaybe, maybe) as Exports
 import Data.Newtype (un, unwrap) as Exports
 import Data.Set (Set) as Exports
 import Data.String (Pattern(..)) as Exports
-import Data.Traversable (sequence, traverse) as Exports
+import Data.Traversable (scanl, sequence, traverse, traverse_) as Exports
 import Data.Tuple (Tuple(..)) as Exports
 import Data.Tuple.Nested ((/\)) as Exports
 import Data.Unfoldable (range) as Exports
