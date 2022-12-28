@@ -9,6 +9,7 @@ import Day10.Puzzle2 as Day10.Puzzle2
 import Day11.Puzzle1 as Day11.Puzzle1
 import Day11.Puzzle2 as Day11.Puzzle2
 import Day12.Puzzle1 as Day12.Puzzle1
+import Day12.Puzzle2 as Day12.Puzzle2
 import Day6.Puzzle1 as Day6.Puzzle1
 import Day6.Puzzle2 as Day6.Puzzle2
 import Day7.Puzzle1 (Input(..))
@@ -105,3 +106,7 @@ main = launchAff_ do
     describe "Day 12 Puzzle 1" do
       it "passes the provided test case" do
         Day12.Puzzle1.ans Day12.Puzzle1.testInput `shouldEqual` Right 31
+
+    describe "Day 12 Puzzle 2" do
+      it "passes the provided test case" do
+        Day12.Puzzle2.ans Day12.Puzzle2.testInput `shouldEqual` Right 29
