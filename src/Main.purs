@@ -10,6 +10,8 @@ import Day11.Puzzle1 as Day11.Puzzle1
 import Day11.Puzzle2 as Day11.Puzzle2
 import Day12.Puzzle1 as Day12.Puzzle1
 import Day12.Puzzle2 as Day12.Puzzle2
+import Day13.Puzzle1 as Day13.Puzzle1
+import Day13.Puzzle2 as Day13.Puzzle2
 import Day2.Puzzle1 as Day2.Puzzle1
 import Day2.Puzzle2 as Day2.Puzzle2
 import Day3.Puzzle1 as Day3.Puzzle1
@@ -77,6 +79,10 @@ run = do
   Day12.Puzzle1.run
   log "Day12.Puzzle2:"
   Day12.Puzzle2.run
+  log "Day13.Puzzle1:"
+  Day13.Puzzle1.run
+  log "Day13.Puzzle2:"
+  Day13.Puzzle2.run
 
 main :: Effect Unit
 main = launchAff_ do
