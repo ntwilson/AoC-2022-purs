@@ -8,6 +8,7 @@ import Day10.Puzzle1 as Day10.Puzzle1
 import Day10.Puzzle2 as Day10.Puzzle2
 import Day11.Puzzle1 as Day11.Puzzle1
 import Day11.Puzzle2 as Day11.Puzzle2
+import Day12.Puzzle1 as Day12.Puzzle1
 import Day6.Puzzle1 as Day6.Puzzle1
 import Day6.Puzzle2 as Day6.Puzzle2
 import Day7.Puzzle1 (Input(..))
@@ -100,3 +101,7 @@ main = launchAff_ do
       it "passes the provided test case" do
         expected <- BigInt.fromString "2713310158" # maybe (Spec.fail "bad test setup. Couldn't parse int" $> zero) pure
         Day11.Puzzle2.ans Day11.Puzzle2.testInput `shouldEqual` expected
+
+    describe "Day 12 Puzzle 1" do
+      it "passes the provided test case" do
+        Day12.Puzzle1.ans Day12.Puzzle1.testInput `shouldEqual` Right 31
