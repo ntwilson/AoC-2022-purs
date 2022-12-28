@@ -53,10 +53,9 @@ instance Ord Value where
   compare (Compound l) (Compound r) = compare l r
 
 instance DecodeJson Value where
-  decodeJson json 
-    | Right i <- decodeJson json = pure $ Single i
-    | Right xs <- decodeJson json = pure $ Compound xs
-    | otherwise = throwError $ Named (stringify json) $ TypeMismatch "Int or Array"
+  decodeJson json =
+    (Single <$> decodeJson json) <|> (Compound <$> decodeJson json) 
+      <|> (throwError $ Named (stringify json) $ TypeMismatch "Int or Array")
 
 split :: ∀ a. Eq a => a -> Array a -> Array (NonEmptyArray a)
 split x xs = xs # Array.groupBy (\a b -> a /= x && b /= x) # Array.filter (_ /= (NonEmptyArray.singleton x))
