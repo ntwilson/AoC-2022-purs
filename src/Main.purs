@@ -12,6 +12,7 @@ import Day12.Puzzle1 as Day12.Puzzle1
 import Day12.Puzzle2 as Day12.Puzzle2
 import Day13.Puzzle1 as Day13.Puzzle1
 import Day13.Puzzle2 as Day13.Puzzle2
+import Day14.Puzzle1 as Day14.Puzzle1
 import Day2.Puzzle1 as Day2.Puzzle1
 import Day2.Puzzle2 as Day2.Puzzle2
 import Day3.Puzzle1 as Day3.Puzzle1
@@ -83,10 +84,25 @@ run = do
   Day13.Puzzle1.run
   log "Day13.Puzzle2:"
   Day13.Puzzle2.run
+  log "Day14.Puzzle1:"
+  Day14.Puzzle1.run
+
+
+printDay14EmptyMap :: ExceptT String Aff Unit
+printDay14EmptyMap = do 
+  input <- Day14.Puzzle1.getInput 
+  grid <- Day14.Puzzle1.parseGrid input
+  Day14.Puzzle1.printGrid grid
+
+printDay14Solution :: ExceptT String Aff Unit
+printDay14Solution = do 
+  input <- Day14.Puzzle1.getInput 
+  grid <- Day14.Puzzle1.parseGrid input
+  Day14.Puzzle1.printGrid $ Day14.Puzzle1.dropAsMuchSandAsPossible grid
 
 main :: Effect Unit
 main = launchAff_ do
-  maybeResult <- runExceptT run
+  maybeResult <- runExceptT printDay14Solution
   case maybeResult of 
     Left err -> log err
     Right unit -> pure unit

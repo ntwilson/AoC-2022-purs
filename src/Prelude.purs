@@ -7,7 +7,7 @@ import Data.Array.NonEmpty (NonEmptyArray) as Exports
 import Data.Bifunctor (lmap) as Exports
 import Data.Either (Either(..), note) as Exports
 import Data.Filterable (filter, filterMap) as Exports
-import Data.Foldable (fold, foldl, maximum, sum) as Exports
+import Data.Foldable (fold, foldl, maximum, minimum, sum) as Exports
 import Data.Function (on) as Exports
 import Data.Interpolate (i) as Exports
 import Data.Maybe (Maybe(..), fromMaybe, isJust, isNothing, maybe) as Exports

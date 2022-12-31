@@ -39,6 +39,7 @@ to generate this file without the comments in this block.
   , "nonempty"
   , "ordered-collections"
   , "parsing"
+  , "partial"
   , "prelude"
   , "spec"
   , "strings"
