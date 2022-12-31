@@ -13,6 +13,7 @@ import Day12.Puzzle2 as Day12.Puzzle2
 import Day13.Puzzle1 as Day13.Puzzle1
 import Day13.Puzzle2 as Day13.Puzzle2
 import Day14.Puzzle1 as Day14.Puzzle1
+import Day14.Puzzle2 as Day14.Puzzle2
 import Day2.Puzzle1 as Day2.Puzzle1
 import Day2.Puzzle2 as Day2.Puzzle2
 import Day3.Puzzle1 as Day3.Puzzle1
@@ -84,8 +85,9 @@ run = do
   Day13.Puzzle1.run
   log "Day13.Puzzle2:"
   Day13.Puzzle2.run
-  log "Day14.Puzzle1:"
-  Day14.Puzzle1.run
+  log "-- Day 14 takes a couple minutes to run, and so is being skipped."
+  log "-- Edit Main.purs to run `printDay14Solution` to access the solution."
+  log "-- (and zoom your terminal window out significantly for Puzzle 2, since the solution takes a lot of screen space)"
 
 
 printDay14EmptyMap :: ExceptT String Aff Unit
@@ -96,9 +98,11 @@ printDay14EmptyMap = do
 
 printDay14Solution :: ExceptT String Aff Unit
 printDay14Solution = do 
-  input <- Day14.Puzzle1.getInput 
-  grid <- Day14.Puzzle1.parseGrid input
-  Day14.Puzzle1.printGrid $ Day14.Puzzle1.dropAsMuchSandAsPossible grid
+  input <- Day14.Puzzle2.getInput 
+  grid <- Day14.Puzzle2.parseGrid input
+  let ans = Day14.Puzzle2.dropAsMuchSandAsPossible grid
+  Day14.Puzzle2.printGrid ans
+  logShow $ Day14.Puzzle2.solution ans
 
 main :: Effect Unit
 main = launchAff_ do
