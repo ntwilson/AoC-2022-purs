@@ -3,7 +3,11 @@ module Day15.Puzzle1 where
 import AOC.Prelude
 
 import Data.Array as Array
-import Data.Set as Set
+import Data.Filterable (partition)
+import Data.List (List(..), (:))
+import Data.List.NonEmpty (NonEmptyList)
+import Data.List.NonEmpty as NonEmptyList
+import Data.Semigroup.Foldable as F1
 import Data.String as String
 import Node.Encoding as Encoding
 import Node.FS.Aff as FS
@@ -49,44 +53,78 @@ parseSensor s = liftEither $ lmap parseErrorMessage $ runParser s $ do
     y <- Parsing.string "y=" *> Parsing.intDecimal
     pure {x, y}
 
-data Interval a = EmptyInterval | PositiveInterval {minValue :: a, maxValue :: a}
-derive instance Eq a => Eq (Interval a)
-derive instance Ord a => Ord (Interval a)
+type PositiveInterval a = {minValue :: a, maxValue :: a}
+type Interval a = Maybe (PositiveInterval a)
+type IntervalUnion a = List (PositiveInterval a)
+appendInterval :: ∀ a. Eq a => Ord a => Interval a -> IntervalUnion a -> IntervalUnion a
+appendInterval x xs = case x, NonEmptyList.fromList intersections.yes of
+  Nothing, _ -> xs
+  Just x, Nothing -> x:xs
+  Just x, Just overlapping -> contiguousUnion (NonEmptyList.cons x overlapping) : intersections.no 
   
-data IntervalUnion a = Contiguous (Interval a) | Disjoint {lower :: Interval a, upper :: Interval a}
-union :: ∀ a. Eq a => Ord a => Interval a -> Interval a -> IntervalUnion a
-union a b = if disjoint a b then Disjoint {lower: min a b, upper: max a b} else Contiguous $ contiguousUnion a b
   where
-  contiguousUnion EmptyInterval x = x
-  contiguousUnion x EmptyInterval = x
-  contiguousUnion (PositiveInterval a) (PositiveInterval b) = 
-    PositiveInterval { minValue: min a.minValue b.minValue, maxValue: max a.maxValue b.maxValue }
-  
-  disjoint EmptyInterval _ = false
-  disjoint _ EmptyInterval = false
-  disjoint (PositiveInterval a) (PositiveInterval b) = a.minValue > b.maxValue || a.maxValue < b.minValue
+  intersects Nothing _ = false
+  intersects (Just a) b = 
+    between b.minValue b.maxValue a.minValue || between b.minValue b.maxValue a.maxValue 
+      || between a.minValue a.maxValue b.minValue || between a.minValue a.maxValue b.maxValue 
 
-excludedLocations :: Int -> Sensor -> Set Coord
-excludedLocations row { location, closestBeacon } = allWithinDistance # Set.delete closestBeacon
+  intersections = partition (intersects x) xs
+
+  contiguousUnion :: NonEmptyList (PositiveInterval a) -> PositiveInterval a
+  contiguousUnion xs = {minValue: F1.minimum (_.minValue <$> xs), maxValue: F1.maximum (_.maxValue <$> xs)}
+
+union :: ∀ a. Eq a => Ord a => IntervalUnion a -> IntervalUnion a -> IntervalUnion a
+union xs ys = foldl (\zs z -> appendInterval (Just z) zs) xs ys
+
+intervalSize :: Interval Int -> Int
+intervalSize Nothing = 0
+intervalSize (Just {minValue, maxValue}) = maxValue - minValue + 1
+
+unionSize :: IntervalUnion Int -> Int
+unionSize xs = sum $ (intervalSize <<< Just) <$> xs
+
+removeIntervalValue :: ∀ a. Ord a => Ring a => a -> Interval a -> IntervalUnion a
+removeIntervalValue _ Nothing = Nil
+removeIntervalValue x (Just xs@{minValue, maxValue}) 
+  | x < minValue || x > maxValue = xs:Nil
+  | otherwise = 
+    {minValue, maxValue: x-one} : {minValue: x+one, maxValue} : Nil 
+      # filter (\{minValue, maxValue} -> minValue <= maxValue)
+
+excludedLocations :: Int -> Sensor -> IntervalUnion Int
+excludedLocations row { location, closestBeacon } = 
+  if row == closestBeacon.y 
+  then removeIntervalValue closestBeacon.x allWithinDistance 
+  else appendInterval allWithinDistance Nil
+
   where
+  -- use this for tracing
+  -- msg x = i"Sensor: "(show location)", beacon: "(show closestBeacon)", excluded locations: "(show x) :: String
   maxDistance = manhattenDistance location closestBeacon - abs (location.y - row)
   manhattenDistance c1 c2 = abs (c1.x - c2.x) + abs (c1.y - c2.y)
   abs a 
     | a > 0 = a
     | otherwise = negate a
 
-  allWithinDistance = Set.fromFoldable do
-    x <- if maxDistance >= 0 then (location.x - maxDistance) .. (location.x + maxDistance) else []
-    pure {x, y: row}
+  allWithinDistance = 
+    if maxDistance >= 0 
+    then Just {minValue: (location.x - maxDistance), maxValue: (location.x + maxDistance)} 
+    else Nothing
 
-allExcludedLocations :: Int -> Array Sensor -> Set Coord
-allExcludedLocations row = Array.foldMap $ excludedLocations row
+allExcludedLocations :: Int -> Array Sensor -> IntervalUnion Int
+allExcludedLocations row sensors = foldl union Nil (excludedLocations row <$> sensors)
+  -- where
+  -- use this folding function for tracing
+  -- traceUnion l r = 
+  --   let x = union l r
+  --   in trace (i"union of "(show l)" and "(show r)" is "(show x) :: String) \_ -> x
 
 solution :: Int -> Array Sensor -> Int
-solution targetRow sensors = allExcludedLocations targetRow sensors # Set.size
+solution targetRow sensors = allExcludedLocations targetRow sensors # unionSize
 
 ans :: ∀ m. MonadThrow String m => Int -> Array String -> m Int
 ans targetRow input = traverse parseSensor input <#> solution targetRow
 
 run :: ExceptT String Aff Unit
 run = getInput >>= ans 2000000 >>= logShow
+
