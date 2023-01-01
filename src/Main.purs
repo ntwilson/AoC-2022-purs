@@ -14,6 +14,7 @@ import Day13.Puzzle1 as Day13.Puzzle1
 import Day13.Puzzle2 as Day13.Puzzle2
 import Day14.Puzzle1 as Day14.Puzzle1
 import Day14.Puzzle2 as Day14.Puzzle2
+import Day15.Puzzle1 as Day15.Puzzle1
 import Day2.Puzzle1 as Day2.Puzzle1
 import Day2.Puzzle2 as Day2.Puzzle2
 import Day3.Puzzle1 as Day3.Puzzle1
@@ -88,6 +89,8 @@ run = do
   log "-- Day 14 takes a couple minutes to run, and so is being skipped."
   log "-- Edit Main.purs to run `printDay14Solution` to access the solution."
   log "-- (and zoom your terminal window out significantly for Puzzle 2, since the solution takes a lot of screen space)"
+  log "Day15.Puzzle1:"
+  Day15.Puzzle1.run
 
 
 printDay14EmptyMap :: ExceptT String Aff Unit
@@ -106,7 +109,7 @@ printDay14Solution = do
 
 main :: Effect Unit
 main = launchAff_ do
-  maybeResult <- runExceptT printDay14Solution
+  maybeResult <- runExceptT run
   case maybeResult of 
     Left err -> log err
     Right unit -> pure unit
