@@ -15,6 +15,7 @@ import Day13.Puzzle2 as Day13.Puzzle2
 import Day14.Puzzle1 as Day14.Puzzle1
 import Day14.Puzzle2 as Day14.Puzzle2
 import Day15.Puzzle1 as Day15.Puzzle1
+import Day15.Puzzle2 as Day15.Puzzle2
 import Day2.Puzzle1 as Day2.Puzzle1
 import Day2.Puzzle2 as Day2.Puzzle2
 import Day3.Puzzle1 as Day3.Puzzle1
@@ -91,6 +92,8 @@ run = do
   log "-- (and zoom your terminal window out significantly for Puzzle 2, since the solution takes a lot of screen space)"
   log "Day15.Puzzle1:"
   Day15.Puzzle1.run
+  log "Day15.Puzzle2:"
+  Day15.Puzzle2.run
 
 
 printDay14EmptyMap :: ExceptT String Aff Unit
@@ -106,6 +109,11 @@ printDay14Solution = do
   let ans = Day14.Puzzle2.dropAsMuchSandAsPossible grid
   Day14.Puzzle2.printGrid ans
   logShow $ Day14.Puzzle2.solution ans
+
+printDay15Solution :: ExceptT String Aff Unit
+printDay15Solution = do
+  sensors <- traverse Day15.Puzzle2.parseSensor Day15.Puzzle2.testInput
+  traverse_ log $ Day15.Puzzle2.createGrid 20 sensors
 
 main :: Effect Unit
 main = launchAff_ do
